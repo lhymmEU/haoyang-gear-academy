@@ -1,0 +1,11 @@
+[package]
+name = "pebbles-game"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gstd = "1.4.2"
+
+[build-dependencies]
+io = { path = "./io" }
+gear-wasm-builder = "1.4.2"
