@@ -20,11 +20,19 @@ impl Metadata for PebblesMetadata {
 #[scale_info(crate = gstd::scale_info)]
 pub struct GameState {
     pub pebbles_count: u32,
+    // This value should always smaller than pebbles_count, otherwise the first player will always win.
     pub max_pebbles_per_turn: u32,
     pub pebbles_remaining: u32,
     pub difficulty: DifficultyLevel,
     pub first_player: Player,
     pub winner: Option<Player>,
+}
+
+impl GameState {
+    pub fn reset(&mut self) {
+        self.pebbles_remaining = self.pebbles_count;
+        self.winner = None;
+    }
 }
 
 #[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
@@ -36,7 +44,7 @@ pub struct PebblesInit {
     pub max_pebbles_per_turn: u32,
 }
 
-#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
+#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo, PartialEq, Eq)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
 pub enum DifficultyLevel {
@@ -66,7 +74,7 @@ pub enum PebblesEvent {
     Won(Player),
 }
 
-#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
+#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo, PartialEq, Eq)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
 pub enum Player {
